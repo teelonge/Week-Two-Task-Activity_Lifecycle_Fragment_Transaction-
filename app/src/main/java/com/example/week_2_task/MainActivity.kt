@@ -55,6 +55,8 @@ class MainActivity : AppCompatActivity() {
 
         txtCounterNdOrientation = findViewById(R.id.txtCounterNdOrientation)
         txtActivityLifecycle = findViewById(R.id.txtActivityLifecycle)
+        getOrientationAndScore()
+
 
         /* Changes the counter upon creation if the activity is newly created, updates
          * the text field with the initial values of the counter, upon each orientation
@@ -62,8 +64,6 @@ class MainActivity : AppCompatActivity() {
          */
         if (savedInstanceState != null) {
             changeCounter()
-        } else {
-            getOrientationAndScore()
         }
 
         txtActivityLifecycle.text = getString(R.string.on_create_lifecycle)
@@ -131,8 +131,7 @@ class MainActivity : AppCompatActivity() {
      * Increments by 1 and updates the appropriate text field
      */
     private fun changeCounter() {
-        viewModel.counter = viewModel.counter + 1
-        getOrientationAndScore()
+        viewModel.changeCounterScore()
     }
 
     /**
@@ -141,11 +140,15 @@ class MainActivity : AppCompatActivity() {
      */
     private fun getOrientationAndScore() {
         val orientation = this.resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            txtCounterNdOrientation.text = getString(R.string.portrait_mode_counter, viewModel.counter)
-        } else {
-            txtCounterNdOrientation.text = getString(R.string.landscape_mode_counter, viewModel.counter)
-        }
+        viewModel.counter.observe(this,{
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+                txtCounterNdOrientation.text = getString(R.string.portrait_mode_counter, it)
+            } else {
+                txtCounterNdOrientation.text = getString(R.string.landscape_mode_counter, it)
+            }
+        })
+
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.week_2_task
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -8,5 +10,16 @@ import androidx.lifecycle.ViewModel
  */
 
 class MainActivityViewModel : ViewModel() {
-    var counter = 0
+
+    private var _counter = MutableLiveData<Int>()
+    val counter: LiveData<Int>
+        get() = _counter
+    init {
+        _counter.value = 0
+    }
+
+
+    fun changeCounterScore(){
+        _counter.value = _counter.value?.plus(1)
+    }
 }
